@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-// Database connection for InfinityFree
-$host = "sql101.infinityfree.com";
-$user = "if0_38243283";
-$password = "HNZEwfWdUQkl0Q1";
-$database = "if0_38243283_db_tuiter";
+$host = "sql103.infinityfree.com";
+$user = "if0_38246856";
+$password = "i5YTerobo6G2";
+$database = "if0_38246856_tuiter";
 $conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -84,6 +83,7 @@ if (isset($_POST['rate']) && isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Tuiter Notes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script>
