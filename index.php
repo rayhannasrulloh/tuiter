@@ -10,13 +10,13 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Redirect to login page if not logged in
+// redirect to login page if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Post content function
+// post content function
 function postContent($user_id, $content) {
     global $conn;
     $stmt = $conn->prepare("INSERT INTO actions (user_id, content, rating) VALUES (?, ?, 0)");
@@ -24,18 +24,15 @@ function postContent($user_id, $content) {
     return $stmt->execute();
 }
 
-// Like/Unlike function
+// like/unlike function
 function toggleLike($user_id, $post_id) {
     global $conn;
-    
-    // Check if the user already liked the post
     $stmt = $conn->prepare("SELECT id FROM likes WHERE user_id = ? AND post_id = ?");
     $stmt->bind_param("ii", $user_id, $post_id);
     $stmt->execute();
     $stmt->store_result();
     
     if ($stmt->num_rows > 0) {
-        // Unlike (Remove like)
         $stmt = $conn->prepare("DELETE FROM likes WHERE user_id = ? AND post_id = ?");
         $stmt->bind_param("ii", $user_id, $post_id);
         $stmt->execute();
@@ -55,7 +52,6 @@ function toggleLike($user_id, $post_id) {
     }
 }
 
-// Fetch content based on algorithm
 function getFilteredContent() {
     global $conn;
     $sql = "SELECT actions.*, users.username FROM actions JOIN users ON actions.user_id = users.id ORDER BY rating DESC, user_id, content";
@@ -63,14 +59,12 @@ function getFilteredContent() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-// Handle posting content
 if (isset($_POST['post']) && isset($_SESSION['user_id'])) {
     postContent($_SESSION['user_id'], $_POST['content']);
     header("Location: index.php");
     exit();
 }
 
-// Handle like/unlike
 if (isset($_POST['rate']) && isset($_SESSION['user_id'])) {
     toggleLike($_SESSION['user_id'], $_POST['post_id']);
     header("Location: index.php");
